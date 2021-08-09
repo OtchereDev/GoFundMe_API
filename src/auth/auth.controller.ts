@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { LocalGuard } from './local-auth.guard';
 import { JwtGuard } from './jwt-auth.guard';
 import { JwtDTO } from './dto/jwt.dto';
+import {  GoogleGuard } from './google-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -14,6 +15,18 @@ export class AuthController {
     @Post('/login')
     async login(@Request() req){
         return this.authService.login(req.user)
+    }
+
+    @UseGuards(GoogleGuard)
+    @Get('/login/google')
+    async googleLogin(@Request() req){
+        // return req.user
+    }
+
+    @UseGuards(GoogleGuard)
+    @Get('/google/callback')
+    async googleCallbackLogin(@Request() req){
+        return req.user
     }
 
     @Get()

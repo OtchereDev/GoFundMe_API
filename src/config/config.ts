@@ -1,4 +1,8 @@
+
+
 export default {
-    saltRounds:10,
-    jwtSecret:'2a5b7148-b7fd-41d9-89b0-dfc726fb9cd5'
+    saltRounds:parseInt(process.env.saltRounds),
+    jwtSecret:process.env.jwtSecret,
+    clientId:process.env.ClientID,
+    clientSecret:process.env.ClientSecret,
 }
