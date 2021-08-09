@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import {option} from './db/connectionOptions'
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { ConfigModule } from '@nestjs/config';
+// import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { ConfigModule } from '@nestjs/config';
       ...option,
       autoLoadEntities:true
     }), 
-    ConfigModule.forRoot(),
+    // ConfigModule.forRoot(),
     UserModule, 
     AuthModule,
   ],

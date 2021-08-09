@@ -29,7 +29,7 @@ export class UserRepository extends Repository<User>{
 
         return {
             email:user[0].email,
-            isActive:user[0].isActive,
+            // isActive:user[0].isActive,
             id:user[0].id
         }
 
@@ -45,12 +45,12 @@ export class UserRepository extends Repository<User>{
             await new_user.save()
             return {
                 email:new_user.email,
-                isActive:new_user.isActive,
+                // isActive:new_user.isActive,
                 id:user[0].id,
             }
             
         } catch (error) {
-
+            console.log(error)
             let message:string = 'Sorry, could not complete signup';
 
             // change error code to reflect db used in prod
