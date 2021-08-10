@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {option} from './db/connectionOptions'
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-// import { ConfigModule } from '@nestjs/config';
+import { FundraiserModule } from './fundraiser/fundraiser.module';
 
 @Module({
   imports: [
@@ -13,11 +11,10 @@ import { AuthModule } from './auth/auth.module';
       ...option,
       autoLoadEntities:true
     }), 
-    // ConfigModule.forRoot(),
     UserModule, 
     AuthModule,
+     FundraiserModule,
   ],
-  controllers: [AppController, ],
-  providers: [AppService],
+
 })
 export class AppModule {}
