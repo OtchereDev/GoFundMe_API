@@ -52,6 +52,11 @@ export class Fundraiser extends BaseEntity{
         eager:true
     })
     organiser:User
+
+    @Column({
+        length:20
+    })
+    country:string
   
     
 
