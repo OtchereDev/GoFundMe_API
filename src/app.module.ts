@@ -4,6 +4,7 @@ import {option} from './db/connectionOptions'
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { FundraiserModule } from './fundraiser/fundraiser.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { FundraiserModule } from './fundraiser/fundraiser.module';
     UserModule, 
     AuthModule,
      FundraiserModule,
+     PaymentsModule,
   ],
 
 })

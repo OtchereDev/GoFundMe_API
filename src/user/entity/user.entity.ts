@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn,BaseEntity, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Fundraiser } from 'src/fundraiser/entity/fundraiser.entity';
+import { Entity, Column, PrimaryGeneratedColumn,BaseEntity, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class User extends BaseEntity {
@@ -15,6 +16,11 @@ export class User extends BaseEntity {
 
   @Column()
   password:string
+
+  @OneToMany(()=>Fundraiser,fundraiser=>fundraiser.organiser,{
+    nullable:true
+  })
+  fundraisers:Fundraiser[]
 
   @CreateDateColumn()
   createdAt:Date

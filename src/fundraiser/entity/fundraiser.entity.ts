@@ -1,9 +1,20 @@
-import { Entity,Column, BaseEntity, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import { Donation } from 'src/payments/entity/donation.entity'
+import { User } from 'src/user/entity/user.entity'
+import { Entity,Column, BaseEntity, PrimaryGeneratedColumn, JoinTable, CreateDateColumn, UpdateDateColumn, ManyToMany, OneToMany, ManyToOne } from 'typeorm'
+import { Category } from './category.entity'
 
 @Entity()
 export class Fundraiser extends BaseEntity{
     @PrimaryGeneratedColumn('uuid')
     id:string
+
+
+    @ManyToMany(()=>Category, category=>category.fundraisers,{
+        eager:true,
+
+    })
+    @JoinTable()
+    category:Category[]
 
     @Column({
         type:'varchar',
@@ -24,26 +35,24 @@ export class Fundraiser extends BaseEntity{
     })
     beneficiary:string
 
+    @OneToMany(()=>Donation,donation=>donation.fundraiser,{
+        nullable:true,
+        eager:true
+    })
+    donations:Donation[]
+
     @Column({
         type:'double',
         precision:2
     })
     goal_amount:number
 
-    @Column({
-        type:'double',
-        precision:2
+    
+    @ManyToOne(()=>User,user=>user.fundraisers,{
+        eager:true
     })
-    amount_raised:number
-
-    @Column({
-        type:'double'
-    })
-    no_of_donors
-
-    // donors
-    // organiser
-    // comments
+    organiser:User
+  
     
 
     @CreateDateColumn()
@@ -51,4 +60,19 @@ export class Fundraiser extends BaseEntity{
 
     @UpdateDateColumn()
     updatedAt:Date
+
+
+    amountRaised():number{
+        let amount=0
+
+        this.donations.forEach(donation=>{
+            amount+=donation.amount
+        })
+
+        return amount
+    }
+
+    no_of_donors():number{
+        return this.donations.length
+    }
 }
