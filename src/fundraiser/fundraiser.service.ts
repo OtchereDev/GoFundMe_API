@@ -21,13 +21,15 @@ export class FundraiserService {
     }
 
  
-    addImageToFundraiser(){
+    async addImageToFundraiser(image_path:string,id:string):Promise<void>{
+
+        return await this.fundraiserRepo.addImageToFundraiser(image_path,id)
 
     }
 
   
-    filterFundraiserByLoc(){
-
+    async filterFundraiserByLoc(loc:string):Promise<Fundraiser[]>{
+        return await this.fundraiserRepo.filterLoc(loc)
     }
 
    
