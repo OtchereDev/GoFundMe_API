@@ -14,8 +14,8 @@ import { PaymentsModule } from './payments/payments.module';
     }), 
     UserModule, 
     AuthModule,
-     FundraiserModule,
-     PaymentsModule,
+    FundraiserModule,
+    PaymentsModule,
   ],
 
 })
