@@ -13,7 +13,9 @@ export class Category extends BaseEntity{
     })
     name:string
 
-    @ManyToMany(()=>Fundraiser,fundraiser=>fundraiser.category)
+    @ManyToMany(()=>Fundraiser,fundraiser=>fundraiser.category,{
+        nullable:true
+    })
     fundraisers:Fundraiser[]
 
 }
