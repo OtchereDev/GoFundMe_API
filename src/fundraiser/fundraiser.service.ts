@@ -3,6 +3,7 @@ import { User } from 'src/user/entity/user.entity';
 import { FundraiserDTO } from './dto/fundraiser.dto';
 import { Fundraiser } from './entity/fundraiser.entity';
 import { FundraiserRepository } from './entity/fundraiser.repo';
+import { FundSearchSerializer } from './types/fundraiser-search.serializer';
 
 @Injectable()
 export class FundraiserService {
@@ -28,17 +29,44 @@ export class FundraiserService {
     }
 
   
-    async filterFundraiserByLoc(loc:string):Promise<Fundraiser[]>{
-        return await this.fundraiserRepo.filterLoc(loc)
+    async filterFundraiserByLoc(loc:string):Promise<FundSearchSerializer[]>{
+        const query = await this.fundraiserRepo.filterLoc(loc)
+
+        let matches:FundSearchSerializer[]
+        for (let index = 0; index < query.length; index++) {
+            matches=query.map(obj=>{
+                return {
+                    title:obj.title,
+                    organiser:{fullName:obj.organiser.fullName},
+                    image_url:obj.image_url
+                }
+            })
+            
+        }
+        return matches
+        
     }
 
    
-    filterFundraiserByCategory(){
-
+    async filterFundraiserByCategory(category:string):Promise<Fundraiser[]>{
+        return await this.fundraiserRepo.filterCategory(category)
     }
 
 
-    searchForFundraiser(){
+    async searchForFundraiser(title:string):Promise<FundSearchSerializer[]>{
+        const query = await this.fundraiserRepo.searchByTitle(title)
+        let matches:FundSearchSerializer[]
+        for (let index = 0; index < query.length; index++) {
+            matches=query.map(obj=>{
+                return {
+                    title:obj.title,
+                    organiser:{fullName:obj.organiser.fullName},
+                    image_url:obj.image_url
+                }
+            })
+            
+        }
+        return matches
 
     }
 
