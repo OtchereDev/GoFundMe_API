@@ -1,6 +1,7 @@
 import { Donation } from 'src/payments/entity/donation.entity'
+import { Story } from 'src/story/entity/story.entity'
 import { User } from 'src/user/entity/user.entity'
-import { Entity,Column, BaseEntity, PrimaryGeneratedColumn, JoinTable, CreateDateColumn, UpdateDateColumn, ManyToMany, OneToMany, ManyToOne } from 'typeorm'
+import { Entity,Column, BaseEntity, PrimaryGeneratedColumn, JoinTable, CreateDateColumn, UpdateDateColumn, ManyToMany, OneToMany, ManyToOne, OneToOne } from 'typeorm'
 import { Category } from './category.entity'
 
 @Entity()
@@ -46,6 +47,11 @@ export class Fundraiser extends BaseEntity{
         precision:2
     })
     goal_amount:number
+
+    @OneToOne(()=>Story,story=>story.fundraiser,{
+        nullable:true
+    })
+    story:Story
 
     
     @ManyToOne(()=>User,user=>user.fundraisers,{
