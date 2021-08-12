@@ -47,7 +47,21 @@ export class FundraiserRepository extends Repository<Fundraiser>{
         //                         .getMany()
 
         const query= await this.find({where:{country:ILike(loc)}})
-        console.log(query)
+       
+        return query
+    }
+
+    async filterCategory(categ:string) : Promise<Fundraiser[]>{
+
+        const query= await this.find({where:{category:{name:ILike(categ)}}})
+        
+        return query
+    }
+
+    async searchByTitle(title:string) : Promise<Fundraiser[]>{
+
+        const query= await this.find({where:{title:ILike(title)}})
+       
         return query
     }
 
