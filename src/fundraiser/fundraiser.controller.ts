@@ -6,6 +6,7 @@ import { Express } from 'express'
 import { FileInterceptor } from '@nestjs/platform-express';
 import { imageStorage } from 'src/config/multer.storages';
 import { ParamInterceptor } from './params.interceptor';
+import { FundSearchSerializer } from './types/fundraiser-search.serializer';
 
 
 
@@ -28,23 +29,23 @@ export class FundraiserController {
     @Post('/upload/image/:id')
     @UseInterceptors(ParamInterceptor,FileInterceptor('image',{storage:imageStorage}))
     async addImageToFundraiser(@UploadedFile() image:Express.Multer.File, @Param('id') id:string):Promise<void>{
-        
-        return await  this.fundraiserService.addImageToFundraiser(image.path,id)
+        const path ='/media/images/'+image.filename
+        return await  this.fundraiserService.addImageToFundraiser(path,id)
     }
 
     @Get('/loc/:location')
-    async filterFundraiserByLoc(@Param('location') loc:string):Promise<Fundraiser[]>{
+    async filterFundraiserByLoc(@Param('location') loc:string):Promise<FundSearchSerializer[]>{
         return await this.fundraiserService.filterFundraiserByLoc(loc)
     }
 
-    @Get()
-    filterFundraiserByCategory(){
-
+    @Get('/cat/:category')
+    async filterFundraiserByCategory(@Param('category') category:string):Promise<Fundraiser[]>{
+        return await this.fundraiserService.filterFundraiserByCategory(category)
     }
 
-    @Get()
-    searchForFundraiser(){
-
+    @Get('/search/:title')
+    async searchForFundraiser(@Param('title') title:string):Promise<FundSearchSerializer[]>{
+        return await this.fundraiserService.searchForFundraiser(title)
     }
 
 
