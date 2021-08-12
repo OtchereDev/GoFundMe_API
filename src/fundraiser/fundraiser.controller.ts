@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, ValidationPipe, UsePipes, UseInterceptors, UploadedFile, Param, } from '@nestjs/common';
+import { Body, Controller, Get, Post, ValidationPipe, UsePipes, UseInterceptors, UploadedFile, Param, ParseUUIDPipe, } from '@nestjs/common';
 import { FundraiserDTO } from './dto/fundraiser.dto';
 import { Fundraiser } from './entity/fundraiser.entity';
 import { FundraiserService } from './fundraiser.service';
@@ -7,6 +7,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { imageStorage } from 'src/config/multer.storages';
 import { ParamInterceptor } from './params.interceptor';
 import { FundSearchSerializer } from './types/fundraiser-search.serializer';
+import { FundDetailSerializer } from './types/fundraiser-detail.serializer';
 
 
 
@@ -18,6 +19,12 @@ export class FundraiserController {
     @Get()
     async getAllFundraiser():Promise<Fundraiser[]>{
         return await this.fundraiserService.getAllFundraiser()
+    }
+
+    @Get('/detail/:uuid')
+    async getDetailFundraiser(@Param('uuid',ParseUUIDPipe) id:string):Promise<FundDetailSerializer>{
+        return await this.fundraiserService.getFundraiserDetail(id)
+
     }
 
     @Post('/create')
