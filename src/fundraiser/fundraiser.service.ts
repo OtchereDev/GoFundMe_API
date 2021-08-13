@@ -57,17 +57,7 @@ export class FundraiserService {
     async filterFundraiserByLoc(loc:string):Promise<FundSearchSerializer[]>{
         const query = await this.fundraiserRepo.filterLoc(loc)
 
-        // let matches:FundSearchSerializer[]
-        // for (let index = 0; index < query.length; index++) {
-        //     matches=query.map(obj=>{
-        //         return {
-        //             title:obj.title,
-        //             organiser:{fullName:obj.organiser.fullName},
-        //             image_url:obj.image_url
-        //         }
-        //     })
-            
-        // }
+        
         return query
         
     }
