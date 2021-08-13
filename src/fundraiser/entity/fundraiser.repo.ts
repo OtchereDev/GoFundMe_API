@@ -41,13 +41,13 @@ export class FundraiserRepository extends Repository<Fundraiser>{
     }
 
     async filterLoc(loc:string) : Promise<Fundraiser[]>{
-        // const query = await this.createQueryBuilder()
-        //                         .select('country')
-        //                         .where("country LIKE '%:loc%'",{loc})
-        //                         .getMany()
-
-        const query= await this.find({where:{country:ILike(loc)}})
-       
+        const query = await this.createQueryBuilder("fund")
+        .leftJoinAndSelect('fund.organiser','organiser', )
+        .select(["fund.id", "fund.country","fund.title", "fund.image_url", "organiser.fullName"])
+        .where("country LIKE :loc",{loc : `%${loc}%`})
+        .orderBy("fund.createdAt","DESC")
+        .getMany()
+                            
         return query
     }
 
