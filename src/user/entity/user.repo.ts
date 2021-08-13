@@ -15,7 +15,7 @@ import { AuthDTO } from "src/auth/dto/auth.dto";
 export class UserRepository extends Repository<User>{
 
     async findOneUser(user_data:AuthDTO) : Promise<UserCreateSerializer |null>{
-        const user = await this.find({email:user_data.email})
+        const user = await this.find({where:{email:user_data.email}, select:["email","password","id"]})
 
         if (user.length===0){
             return null
