@@ -42,11 +42,11 @@ export class FundraiserRepository extends Repository<Fundraiser>{
 
     async filterLoc(loc:string) : Promise<Fundraiser[]>{
         const query = await this.createQueryBuilder("fund")
-        .leftJoinAndSelect('fund.organiser','organiser', )
-        .select(["fund.id", "fund.country","fund.title", "fund.image_url", "organiser.fullName"])
-        .where("country LIKE :loc",{loc : `%${loc}%`})
-        .orderBy("fund.createdAt","DESC")
-        .getMany()
+                                .leftJoinAndSelect('fund.organiser','organiser', )
+                                .select(["fund.id", "fund.country","fund.title", "fund.image_url", "organiser.fullName"])
+                                .where("country LIKE :loc",{loc : `%${loc}%`})
+                                .orderBy("fund.createdAt","DESC")
+                                .getMany()
                             
         return query
     }
@@ -60,8 +60,13 @@ export class FundraiserRepository extends Repository<Fundraiser>{
 
     async searchByTitle(title:string) : Promise<Fundraiser[]>{
 
-        const query= await this.find({where:{title:ILike(title)}})
-       
+        const query= await this.createQueryBuilder("fund")
+                                .leftJoinAndSelect('fund.organiser','organiser', )
+                                .select(["fund.id", "fund.country","fund.title", "fund.image_url", "organiser.fullName"])
+                                .where("fund.title LIKE :title",{title : `%${title}%`})
+                                .orderBy("fund.createdAt","DESC")
+                                .getMany()
+        
         return query
     }
 
