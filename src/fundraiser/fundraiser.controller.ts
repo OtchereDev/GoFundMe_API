@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, ValidationPipe, UsePipes, UseInterceptors, UploadedFile, Param, ParseUUIDPipe, } from '@nestjs/common';
+import { Body, Controller, Get, Post, ValidationPipe, UsePipes, UseInterceptors, UploadedFile, Param, ParseUUIDPipe, UseGuards, Req, } from '@nestjs/common';
 import { FundraiserDTO } from './dto/fundraiser.dto';
 import { Fundraiser } from './entity/fundraiser.entity';
 import { FundraiserService } from './fundraiser.service';
@@ -8,6 +8,7 @@ import { imageStorage } from 'src/config/multer.storages';
 import { ParamInterceptor } from './params.interceptor';
 import { FundSearchSerializer } from './types/fundraiser-search.serializer';
 import { FundDetailSerializer } from './types/fundraiser-detail.serializer';
+import { JwtGuard } from 'src/auth/jwt-auth.guard';
 
 
 
@@ -29,15 +30,19 @@ export class FundraiserController {
 
     @Post('/create')
     @UsePipes(ValidationPipe)
-    async createFundraiser(@Body() body:FundraiserDTO):Promise<Fundraiser>{
-        return await this.fundraiserService.createFundraiser(body)
+    @UseGuards(JwtGuard)
+    async createFundraiser(@Body() body:FundraiserDTO,@Req() req):Promise<Fundraiser>{
+        return await this.fundraiserService.createFundraiser(body,req.user.email)
     }
 
     @Post('/upload/image/:id')
+    @UseGuards(JwtGuard)
     @UseInterceptors(ParamInterceptor,FileInterceptor('image',{storage:imageStorage}))
-    async addImageToFundraiser(@UploadedFile() image:Express.Multer.File, @Param('id') id:string):Promise<void>{
+    async addImageToFundraiser(@UploadedFile() image:Express.Multer.File, 
+                                @Param('id') id:string,
+                                @Req() req):Promise<void>{
         const path ='/media/images/'+image.filename
-        return await  this.fundraiserService.addImageToFundraiser(path,id)
+        return await  this.fundraiserService.addImageToFundraiser(path,id,req.user.email)
     }
 
     @Get('/loc/:location')
