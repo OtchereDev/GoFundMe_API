@@ -41,15 +41,15 @@ export class FundraiserService {
     }
 
   
-    async createFundraiser(body:FundraiserDTO):Promise<Fundraiser>{
-        const user= await User.findOne(1)
+    async createFundraiser(body:FundraiserDTO,email:string):Promise<Fundraiser>{
+        const user= await User.findOne({email})
         return this.fundraiserRepo.createFundraiser(body,user)
     }
 
  
-    async addImageToFundraiser(image_path:string,id:string):Promise<void>{
+    async addImageToFundraiser(image_path:string,id:string,email:string):Promise<void>{
 
-        return await this.fundraiserRepo.addImageToFundraiser(image_path,id)
+        return await this.fundraiserRepo.addImageToFundraiser(image_path,id,email)
 
     }
 
