@@ -24,10 +24,10 @@ export class FundraiserRepository extends Repository<Fundraiser>{
 
     }
 
-    async addImageToFundraiser(image_path:string,id:string){
+    async addImageToFundraiser(image_path:string,id:string,email:string){
 
         try {
-            const fundraiser=await this.findOneOrFail({id})
+            const fundraiser=await this.findOneOrFail({where:{id,organiser:{email}},relations:["organiser"]})
 
             fundraiser.image_url=image_path
             await fundraiser.save()
