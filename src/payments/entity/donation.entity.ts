@@ -1,5 +1,6 @@
 import { Fundraiser } from 'src/fundraiser/entity/fundraiser.entity'
-import { BaseEntity, Entity,Column, PrimaryGeneratedColumn,ManyToOne, CreateDateColumn } from 'typeorm'
+import { BaseEntity, Entity,Column, PrimaryGeneratedColumn,ManyToOne, CreateDateColumn, OneToOne, JoinColumn } from 'typeorm'
+import { PaymentIntent } from './payment-intent.entity'
 
 
 @Entity()
@@ -10,7 +11,9 @@ export class Donation extends BaseEntity{
 
     // PaymentIntent
 
-    @Column()
+    @Column({
+        nullable:true
+    })
     name:string
 
     @ManyToOne(()=>Fundraiser, fundraiser=>fundraiser.donations)
@@ -26,6 +29,10 @@ export class Donation extends BaseEntity{
         nullable:true
     })
     comment:string
+
+    @OneToOne(()=>PaymentIntent,)
+    @JoinColumn()
+    intent:PaymentIntent
 
     @CreateDateColumn()
     createdAt:Date
