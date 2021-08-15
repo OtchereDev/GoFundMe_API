@@ -9,10 +9,13 @@ import { ParamInterceptor } from './params.interceptor';
 import { FundSearchSerializer } from './types/fundraiser-search.serializer';
 import { FundDetailSerializer } from './types/fundraiser-detail.serializer';
 import { JwtGuard } from 'src/auth/jwt-auth.guard';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
+import { FileUploadDto } from './types/fundraiser-file-upload.dto';
 
 
 
 @Controller('fundraiser')
+@ApiTags('Fundraiser')
 export class FundraiserController {
 
     constructor(private fundraiserService:FundraiserService){}
@@ -23,6 +26,7 @@ export class FundraiserController {
     }
 
     @Get('/detail/:uuid')
+    
     async getDetailFundraiser(@Param('uuid',ParseUUIDPipe) id:string):Promise<FundDetailSerializer>{
         return await this.fundraiserService.getFundraiserDetail(id)
 
@@ -31,6 +35,7 @@ export class FundraiserController {
     @Post('/create')
     @UsePipes(ValidationPipe)
     @UseGuards(JwtGuard)
+    @ApiBearerAuth()
     async createFundraiser(@Body() body:FundraiserDTO,@Req() req):Promise<Fundraiser>{
         return await this.fundraiserService.createFundraiser(body,req.user.email)
     }
@@ -38,6 +43,17 @@ export class FundraiserController {
     @Post('/upload/image/:id')
     @UseGuards(JwtGuard)
     @UseInterceptors(ParamInterceptor,FileInterceptor('image',{storage:imageStorage}))
+    @ApiConsumes('multipart/form-data')
+    @ApiParam({
+        type:"string",
+        description:"valid uuid for fundraiser",
+        name:'id'
+    })
+    @ApiBody({
+        type:FileUploadDto,
+        description: "Image for fundraiser"
+    })
+    @ApiBearerAuth()
     async addImageToFundraiser(@UploadedFile() image:Express.Multer.File, 
                                 @Param('id') id:string,
                                 @Req() req):Promise<void>{
