@@ -5,8 +5,10 @@ import { LocalGuard } from './local-auth.guard';
 import { JwtGuard } from './jwt-auth.guard';
 import { JwtDTO } from './dto/jwt.dto';
 import {  GoogleGuard } from './google-auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags('Auth')
 export class AuthController {
 
     constructor(private authService:AuthService){}
@@ -31,11 +33,6 @@ export class AuthController {
         return data
     }
 
-    @Get()
-    @UseGuards(JwtGuard)
-    testJWt(){
-        return 'It works'
-    }
 
     @Post('/refresh_token')
     @UsePipes(ValidationPipe)
