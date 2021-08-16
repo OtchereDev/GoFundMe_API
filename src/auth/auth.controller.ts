@@ -5,7 +5,9 @@ import { LocalGuard } from './local-auth.guard';
 import { JwtGuard } from './jwt-auth.guard';
 import { JwtDTO } from './dto/jwt.dto';
 import {  GoogleGuard } from './google-auth.guard';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
+import { TokenType } from './types/token.type';
+import { AuthType } from './types/auth.type';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -15,7 +17,7 @@ export class AuthController {
 
     @UseGuards(LocalGuard)
     @Post('/login')
-    async login(@Request() req){
+    async login(@Request() req):Promise<AuthType>{
         return this.authService.login(req.user)
     }
 
@@ -27,7 +29,8 @@ export class AuthController {
 
     @UseGuards(GoogleGuard)
     @Get('/google/callback')
-    async googleCallbackLogin(@Request() req){
+    @ApiExcludeEndpoint()
+    async googleCallbackLogin(@Request() req):Promise<AuthType>{
         const data=await this.authService.login(req.user)
       
         return data
@@ -36,7 +39,7 @@ export class AuthController {
 
     @Post('/refresh_token')
     @UsePipes(ValidationPipe)
-    async refreshToken(@Body() body:JwtDTO){
+    async refreshToken(@Body() body:JwtDTO):Promise<TokenType>{
         const verify_jwt = this.authService.refreshToken(body)
 
         return verify_jwt
