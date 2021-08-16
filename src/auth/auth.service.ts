@@ -4,6 +4,8 @@ import { UserService } from 'src/user/user.service';
 import { AuthDTO } from './dto/auth.dto';
 import { JwtDTO } from './dto/jwt.dto';
 import { JwtService } from '@nestjs/jwt';
+import { AuthType } from './types/auth.type';
+import { TokenType } from './types/token.type';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +19,7 @@ export class AuthService {
     }
 
  
-    async refreshToken(body:JwtDTO){
+    async refreshToken(body:JwtDTO) : Promise<TokenType>{
 
         try {
             
@@ -51,7 +53,7 @@ export class AuthService {
     }
 
 
-    async login(user:UserCreateSerializer){
+    async login(user:UserCreateSerializer):Promise<AuthType>{
         const payload={email:user.email,sub:user.id}
 
 
