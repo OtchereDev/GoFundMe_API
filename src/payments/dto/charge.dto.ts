@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger'
 import {IsAlpha, IsNotEmpty, IsNumber, IsUUID, Min} from 'class-validator'
 
 export class Charge{
@@ -8,12 +9,21 @@ export class Charge{
     @Min(5,{
         message:'mininmum amount is $5'
     })
+    @ApiProperty({
+        description:"Amount being donated"
+    })
     amount:number
 
     @IsUUID()
-    fundraiser_id
+    @ApiProperty({
+        description:"The id of the fundraiser to which the donation is made to"
+    })
+    fundraiser_id:string
 
-    @IsAlpha()
+    // @IsAlpha()
     @IsNotEmpty()
+    @ApiProperty({
+        description:"Full name of the donor"
+    })
     name:string
 }

@@ -36,6 +36,18 @@ export class UserRepository extends Repository<User>{
 
     }
 
+    async getUser(email) {
+
+        const query = await this.findOne({email})
+
+        return {
+            email,
+            full_name: query.fullName,
+            id:query.id
+
+        }
+    }
+
     async createUser(user:UserDTO) :Promise<UserCreateSerializer> {
 
         try {
@@ -43,10 +55,11 @@ export class UserRepository extends Repository<User>{
             const new_user = this.create({...user,password})
             
             await new_user.save()
+            
             return {
                 email:new_user.email,
                 // isActive:new_user.isActive,
-                id:user[0].id,
+                id:new_user.id,
             }
             
         } catch (error) {

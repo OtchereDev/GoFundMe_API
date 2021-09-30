@@ -1,10 +1,22 @@
+import { ApiProperty } from "@nestjs/swagger"
 
-export type FundSearchSerializer={
-    id:string,
-    country:string,
-    title:string,
+export class FundSearchSerializer{
+
+    @ApiProperty()
+    id:string
+
+    @ApiProperty()
+    country:string
+
+    @ApiProperty()
+    title:string
+
+    @ApiProperty()
     organiser:{
-        fullName:string,
-    },
+       
+        fullName:string
+    }
+
+    @ApiProperty()
     image_url:string
 }

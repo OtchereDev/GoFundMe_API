@@ -7,10 +7,16 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthType } from './types/auth.type';
 import { TokenType } from './types/token.type';
 
+import { OAuth2Client } from 'google-auth-library';
+import { UserRepository } from 'src/user/entity/user.repo';
+import config from 'src/config/config';
+const client = new OAuth2Client(process.env.CLIENT_ID)
+
 @Injectable()
 export class AuthService {
     constructor(private userService:UserService,
-                private jwtService:JwtService){}
+                private jwtService:JwtService,
+                private userRepository:UserRepository){}
 
     async validateUser(user_data:AuthDTO): Promise<UserCreateSerializer|null> {
         const user = await this.userService.getUser(user_data);
@@ -65,6 +71,43 @@ export class AuthService {
             refresh_token:this.jwtService.sign({...payload,refresh:true})
         }
 
+    }
+
+    async customGoogleLogin(body:any):Promise<AuthType>{
+        const { token }  = body
+
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.CLIENT_ID
+        });
+        
+        const { name, email, picture } = ticket.getPayload(); 
+
+        const checkUser=await this.userRepository.findOne({email})
+        
+
+        if (!checkUser){
+            await this.userRepository.createUser({email,
+                                                fullName:name, 
+                                                password:config.socialAuthPassword})
+            
+            
+        }
+        
+
+        const payload={
+           
+            email,
+            sub:checkUser.id
+        }
+   
+    
+        return {
+            access_token:this.jwtService.sign(payload,{
+                expiresIn:'180s'
+            }),
+            refresh_token:this.jwtService.sign({...payload,refresh:true})
+        }
     }
 }
 

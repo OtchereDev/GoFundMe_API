@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import {NestExpressApplication} from '@nestjs/platform-express'
 import { join } from 'path';
 import * as express from 'express'
-import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger'
+import {DocumentBuilder, SwaggerCustomOptions, SwaggerModule} from '@nestjs/swagger'
 
 
 async function bootstrap() {
@@ -22,12 +22,19 @@ async function bootstrap() {
                     .setTitle("GoFundMe API")
                     .setDescription("This is the API definition of the Clone of GoFundMe")
                     .setVersion("1.0")
-                    .setContact("Oliver Otchere","you.tube/c/OtchereDev","Oliverotchere4@gmail.com")
+                    .setContact("Oliver Otchere","","Oliverotchere4@gmail.com")
+                    .addBearerAuth()
+                    .addOAuth2()
                     .build()
+
+
+  const option:SwaggerCustomOptions={
+    customSiteTitle:"GoFundMe Docs"
+  } 
 
   const document = SwaggerModule.createDocument(app,config)
 
-  SwaggerModule.setup("docs",app,document)
+  SwaggerModule.setup("docs",app,document,option)
 
   await app.listen(3000);
 }

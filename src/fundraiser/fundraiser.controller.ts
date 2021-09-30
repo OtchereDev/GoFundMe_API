@@ -9,8 +9,9 @@ import { ParamInterceptor } from './params.interceptor';
 import { FundSearchSerializer } from './types/fundraiser-search.serializer';
 import { FundDetailSerializer } from './types/fundraiser-detail.serializer';
 import { JwtGuard } from 'src/auth/jwt-auth.guard';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { FileUploadDto } from './types/fundraiser-file-upload.dto';
+import { FundraiserHomeSerializer } from './types/fundraiser.home.serializer';
 
 
 
@@ -21,12 +22,13 @@ export class FundraiserController {
     constructor(private fundraiserService:FundraiserService){}
 
     @Get()
-    async getAllFundraiser():Promise<Fundraiser[]>{
+    @ApiOkResponse({type:[FundraiserHomeSerializer] ,description:'Get all fundraisers'})
+    async getAllFundraiser():Promise<FundraiserHomeSerializer[]>{
         return await this.fundraiserService.getAllFundraiser()
     }
 
     @Get('/detail/:uuid')
-    
+    @ApiOkResponse({type:FundDetailSerializer,description:'Detail for a fundraiser'})
     async getDetailFundraiser(@Param('uuid',ParseUUIDPipe) id:string):Promise<FundDetailSerializer>{
         return await this.fundraiserService.getFundraiserDetail(id)
 
@@ -36,18 +38,20 @@ export class FundraiserController {
     @UsePipes(ValidationPipe)
     @UseGuards(JwtGuard)
     @ApiBearerAuth()
-    async createFundraiser(@Body() body:FundraiserDTO,@Req() req):Promise<Fundraiser>{
+    @ApiBody({type:FundraiserDTO})
+    @ApiOkResponse({type:FundDetailSerializer ,description:'Returns created Fundraiser'})
+    async createFundraiser(@Body() body:FundraiserDTO,@Req() req):Promise<FundDetailSerializer>{
         return await this.fundraiserService.createFundraiser(body,req.user.email)
     }
 
-    @Post('/upload/image/:id')
+    @Post('/upload/image/:uuid')
     @UseGuards(JwtGuard)
     @UseInterceptors(ParamInterceptor,FileInterceptor('image',{storage:imageStorage}))
     @ApiConsumes('multipart/form-data')
     @ApiParam({
         type:"string",
         description:"valid uuid for fundraiser",
-        name:'id'
+        name:'uuid'
     })
     @ApiBody({
         type:FileUploadDto,
@@ -55,23 +59,42 @@ export class FundraiserController {
     })
     @ApiBearerAuth()
     async addImageToFundraiser(@UploadedFile() image:Express.Multer.File, 
-                                @Param('id') id:string,
+                                @Param('uuid') id:string,
                                 @Req() req):Promise<void>{
         const path ='/media/images/'+image.filename
         return await  this.fundraiserService.addImageToFundraiser(path,id,req.user.email)
     }
 
+
     @Get('/loc/:location')
+    @ApiParam({
+        type:'string',
+        name:'location',
+        description:'Location for which search should be performed'
+    })
+    @ApiOkResponse({type:[FundSearchSerializer],description:'Fundraiser found in the given location'})
     async filterFundraiserByLoc(@Param('location') loc:string):Promise<FundSearchSerializer[]>{
         return await this.fundraiserService.filterFundraiserByLoc(loc)
     }
 
     @Get('/cat/:category')
+    @ApiParam({
+        type:'string',
+        name:'category',
+        description:'Category for which search should be performed'
+    })
+    @ApiOkResponse({type:[FundSearchSerializer],description:'Fundraiser found in the given category'})
     async filterFundraiserByCategory(@Param('category') category:string):Promise<Fundraiser[]>{
         return await this.fundraiserService.filterFundraiserByCategory(category)
     }
 
     @Get('/search/:title')
+    @ApiParam({
+        type:'string',
+        name:'title',
+        description:'Title for which search should be performed on'
+    })
+    @ApiOkResponse({type:[FundSearchSerializer],description:'Fundraiser found with similar title'})
     async searchForFundraiser(@Param('title') title:string):Promise<FundSearchSerializer[]>{
         return await this.fundraiserService.searchForFundraiser(title)
     }

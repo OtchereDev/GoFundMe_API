@@ -1,7 +1,7 @@
 import { Donation } from 'src/payments/entity/donation.entity'
 import { Story } from 'src/story/entity/story.entity'
 import { User } from 'src/user/entity/user.entity'
-import { Entity,Column, BaseEntity, PrimaryGeneratedColumn, JoinTable, CreateDateColumn, UpdateDateColumn, ManyToMany, OneToMany, ManyToOne, OneToOne } from 'typeorm'
+import { Entity,Column, BaseEntity, PrimaryGeneratedColumn, JoinTable, CreateDateColumn, UpdateDateColumn, ManyToMany, OneToMany, ManyToOne, OneToOne, JoinColumn } from 'typeorm'
 import { Category } from './category.entity'
 
 @Entity()
@@ -38,8 +38,9 @@ export class Fundraiser extends BaseEntity{
 
     @OneToMany(()=>Donation,donation=>donation.fundraiser,{
         nullable:true,
-        eager:true
+        eager:true,
     })
+    @JoinColumn()
     donations:Donation[]
 
     @Column({
@@ -73,10 +74,13 @@ export class Fundraiser extends BaseEntity{
     updatedAt:Date
 
 
-    amountRaised():number{
+    async amountRaised():Promise<number>{
         let amount=0
+        
 
-        this.donations.forEach(donation=>{
+        const donations =await Donation.find({where:{fundraiser:this},relations:["fundraiser"],order:{createdAt:"DESC"}})
+
+        donations?.forEach(donation=>{
             amount+=donation.amount
         })
 
@@ -84,6 +88,16 @@ export class Fundraiser extends BaseEntity{
     }
 
     no_of_donors():number{
-        return this.donations.length
+         return this.donations? this.donations.length : 0
+    }
+
+    async last_donation_time():Promise<Date>{
+        const donations =await Donation.find({where:{fundraiser:this},relations:["fundraiser"],order:{createdAt:"DESC"}})
+        
+        return donations[0]?.createdAt
+    }
+
+    getBrief():string{
+        return this.description.slice(0,200)
     }
 }

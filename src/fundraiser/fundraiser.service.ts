@@ -5,21 +5,36 @@ import { Fundraiser } from './entity/fundraiser.entity';
 import { FundraiserRepository } from './entity/fundraiser.repo';
 import { FundDetailSerializer } from './types/fundraiser-detail.serializer';
 import { FundSearchSerializer } from './types/fundraiser-search.serializer';
+import { FundraiserHomeSerializer } from './types/fundraiser.home.serializer';
 
 @Injectable()
 export class FundraiserService {
 
     constructor(private fundraiserRepo:FundraiserRepository){}
 
-    async getAllFundraiser() :Promise<Fundraiser[]>{
+    async getAllFundraiser():Promise<FundraiserHomeSerializer[]> {
         
-        return await this.fundraiserRepo.find()
+        const query = await this.fundraiserRepo.getAllFundraiser() 
+
+        const response:FundraiserHomeSerializer[]=[]
+        for (const obj of query){
+
+            response.push({...obj,
+                last_donation_time:await obj.last_donation_time(),
+                description:obj.getBrief(),
+                amountRaised:await obj.amountRaised()
+            })
+
+        }
+     
+        
+        return response
     }
 
     async getFundraiserDetail(id:string):Promise<FundDetailSerializer>{
 
         try {
-            const query = await this.fundraiserRepo.findOneOrFail({id})
+            const query = await this.fundraiserRepo.findOneOrFail(id)
             const response:FundDetailSerializer={
                 id: query.id,
                 category: query.category.map(cat=>cat.name),
@@ -31,19 +46,37 @@ export class FundraiserService {
                 organiser: query.organiser.fullName,
                 country: query.country,
                 createdAt: query.createdAt,
-                amountRaised: query.amountRaised(),
+                amountRaised: await query.amountRaised(),
                 no_of_donors: query.no_of_donors(),
+                image_url: query.image_url
             }
             return response
         } catch (error) {
+            console.log(error)
             throw new BadRequestException('No Fundraiser found with the id provided.')
         }
     }
 
   
-    async createFundraiser(body:FundraiserDTO,email:string):Promise<Fundraiser>{
+    async createFundraiser(body:FundraiserDTO,email:string):Promise<FundDetailSerializer>{
         const user= await User.findOne({email})
-        return this.fundraiserRepo.createFundraiser(body,user)
+        const query=await this.fundraiserRepo.createFundraiser(body,user)
+        const obj:FundDetailSerializer={
+            id: query.id,
+            category: query.category.map(cat=>cat.name),
+            title: query.title,
+            description: query.description,
+            beneficiary: query.beneficiary,
+            donations: query.donations,
+            goal_amount: query.goal_amount,
+            organiser: query.organiser.fullName,
+            country: query.country,
+            createdAt: query.createdAt,
+            amountRaised: await query.amountRaised(),
+            no_of_donors: query.no_of_donors(),
+            image_url:query.image_url
+        }
+        return obj
     }
 
  

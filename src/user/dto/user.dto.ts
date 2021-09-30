@@ -19,10 +19,10 @@ export class UserDTO{
     })
     email:string
 
-    @MinLength(6,{
-        'message':'mininum length of a password is 6'
+    @MinLength(8,{
+        'message':'mininum length of a password is 8'
     })
-    @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&^_-]{8,}$/,{
+    @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&\.^_-]{8,}$/,{
         message:'please provide a strong password'
     })
     @ApiProperty({
