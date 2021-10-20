@@ -11,6 +11,8 @@ import { FundDetailSerializer } from './types/fundraiser-detail.serializer';
 import { JwtGuard } from 'src/auth/jwt-auth.guard';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
 import { FileUploadDto } from './types/fundraiser-file-upload.dto';
+import DonationType from './types/donations.type';
+import CommentType from './types/comments.type';
 
 
 
@@ -21,15 +23,24 @@ export class FundraiserController {
     constructor(private fundraiserService:FundraiserService){}
 
     @Get()
-    async getAllFundraiser():Promise<Fundraiser[]>{
+    async getAllFundraiser(){
         return await this.fundraiserService.getAllFundraiser()
     }
 
     @Get('/detail/:uuid')
-    
     async getDetailFundraiser(@Param('uuid',ParseUUIDPipe) id:string):Promise<FundDetailSerializer>{
         return await this.fundraiserService.getFundraiserDetail(id)
 
+    }
+
+    @Post('/detail/donations/:uuid')
+    async getFundraiserDonations(@Param("uuid",ParseUUIDPipe) id:string):Promise<DonationType>{
+        return await this.fundraiserService.getFundraiserDonations(id)
+    }
+
+    @Post('/detail/comments/:uuid')
+    async getFundraiserComments(@Param("uuid",ParseUUIDPipe) id:string):Promise<CommentType>{
+        return await this.fundraiserService.getFundraiserComments(id)
     }
 
     @Post('/create')
