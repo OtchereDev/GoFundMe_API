@@ -8,7 +8,7 @@ export type FundDetailSerializer ={
     beneficiary:string
     donations:Donation[]
     goal_amount:number
-    organiser:string
+    organiser:string | {fullName:string,email:string},
     country:string
     createdAt:Date
     amountRaised:number
