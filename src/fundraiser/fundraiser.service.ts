@@ -3,6 +3,8 @@ import { User } from 'src/user/entity/user.entity';
 import { FundraiserDTO } from './dto/fundraiser.dto';
 import { Fundraiser } from './entity/fundraiser.entity';
 import { FundraiserRepository } from './entity/fundraiser.repo';
+import CommentType from './types/comments.type';
+import DonationType from './types/donations.type';
 import { FundDetailSerializer } from './types/fundraiser-detail.serializer';
 import { FundSearchSerializer } from './types/fundraiser-search.serializer';
 
@@ -11,9 +13,10 @@ export class FundraiserService {
 
     constructor(private fundraiserRepo:FundraiserRepository){}
 
-    async getAllFundraiser() :Promise<Fundraiser[]>{
+    async getAllFundraiser() {
         
-        return await this.fundraiserRepo.find()
+        const fundraisers = await this.fundraiserRepo.find()
+        return fundraisers.map(fundraiser=>{return {...fundraiser,amountRaised:fundraiser.amountRaised()}})
     }
 
     async getFundraiserDetail(id:string):Promise<FundDetailSerializer>{
@@ -26,9 +29,12 @@ export class FundraiserService {
                 title: query.title,
                 description: query.description,
                 beneficiary: query.beneficiary,
-                donations: query.donations,
+                donations: query.donations?.slice(-5),
                 goal_amount: query.goal_amount,
-                organiser: query.organiser.fullName,
+                organiser: {
+                    fullName:query.organiser.fullName,
+                    email:query.organiser.email
+                },
                 country: query.country,
                 createdAt: query.createdAt,
                 amountRaised: query.amountRaised(),
@@ -37,6 +43,34 @@ export class FundraiserService {
             return response
         } catch (error) {
             throw new BadRequestException('No Fundraiser found with the id provided.')
+        }
+    }
+
+    async getFundraiserDonations(id:string){
+        try {
+            const fundraiser = await this.fundraiserRepo.findOneOrFail({id})
+            const response : DonationType = {
+                donations: fundraiser.donations
+            }
+
+            return response
+        } catch (error) {
+            
+        }
+    }
+
+    async getFundraiserComments(id:string){
+        try {
+            const fundraiser = await this.fundraiserRepo.findOneOrFail({id})
+
+            
+            const response : CommentType = {
+                comments: fundraiser.donations.filter(donation=>donation.comment)
+            }
+
+            return response
+        } catch (error) {
+            
         }
     }
 
@@ -69,7 +103,7 @@ export class FundraiserService {
 
 
     async searchForFundraiser(title:string):Promise<FundSearchSerializer[]>{
-        const query = await this.fundraiserRepo.searchByTitle(title)
+        const query = await this.fundraiserRepo.searchByTitleLoc(title)
         
         return query
 
