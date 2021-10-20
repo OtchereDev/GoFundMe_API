@@ -58,12 +58,13 @@ export class FundraiserRepository extends Repository<Fundraiser>{
         return query
     }
 
-    async searchByTitle(title:string) : Promise<Fundraiser[]>{
+    async searchByTitleLoc(title:string) : Promise<Fundraiser[]>{
 
         const query= await this.createQueryBuilder("fund")
                                 .leftJoinAndSelect('fund.organiser','organiser', )
                                 .select(["fund.id", "fund.country","fund.title", "fund.image_url", "organiser.fullName"])
                                 .where("fund.title LIKE :title",{title : `%${title}%`})
+                                .orWhere("fund.country LIKE :title", {title:`%${title}%`})
                                 .orderBy("fund.createdAt","DESC")
                                 .getMany()
         
