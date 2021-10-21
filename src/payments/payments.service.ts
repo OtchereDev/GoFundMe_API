@@ -4,6 +4,7 @@ import Stripe from 'stripe'
 import config from 'src/config/config';
 import { PaymentIntent } from './entity/payment-intent.entity';
 import { Fundraiser } from 'src/fundraiser/entity/fundraiser.entity';
+import { PaymentInit } from './types/payment-init.type';
 
 
 @Injectable()
@@ -15,7 +16,7 @@ export class PaymentsService {
 
     private readonly endpointSecret = config.stripeWebhook;
     
-    verify_webhook(req,signature){
+    verify_webhook(req,signature):void{
         
         
         try {
@@ -31,7 +32,7 @@ export class PaymentsService {
 
     }
 
-    async createPaymentIntent(amount:number, fundraiser_id,name){
+    async createPaymentIntent(amount:number, fundraiser_id,name) : Promise<PaymentInit>{
         try {
             await Fundraiser.findOneOrFail(fundraiser_id)
             const paymentIntent = await this.stripe.paymentIntents.create({
@@ -62,7 +63,7 @@ export class PaymentsService {
 
    
    
-    async handleWebhook(event:Stripe.Event,signature:string,req){
+    async handleWebhook(event:Stripe.Event,signature:string,req) : Promise<void>{
         this.verify_webhook(req,signature)
         
         switch (event.type) {
@@ -73,7 +74,7 @@ export class PaymentsService {
               await this.donationRepo.saveDonation(
                   paymentIntent.id,
                   paymentIntent.metadata.name,
-                  paymentIntent.amount,
+                  paymentIntent.amount / 100,
               )
             
               break;
@@ -87,8 +88,8 @@ export class PaymentsService {
           } 
     }
 
-    async addPayerComment(intent_id:string,message:string){
-            await this.donationRepo.addPayerComment(intent_id,message)
+    async addPayerComment(intent_id:string,message:string):Promise<void>{
+        await this.donationRepo.addPayerComment(intent_id,message)
         return 
     }
 

@@ -71,4 +71,19 @@ export class FundraiserRepository extends Repository<Fundraiser>{
         return query
     }
 
+    async getAllFundraiser(){
+        const query= await this.createQueryBuilder("fundraiser")
+                        // .leftJoinAndSelect('fundraiser.donations','donation', )
+                        .select(["fundraiser.image_url","fundraiser.id","fundraiser.title",
+                                "fundraiser.goal_amount","fundraiser.country",
+                                "fundraiser.description"
+                            ])
+
+                        .orderBy("fundraiser.createdAt","DESC")
+                        // .take(8)
+                        .getMany()
+        
+        return await query
+    }
+
 }

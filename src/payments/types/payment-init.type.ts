@@ -1,9 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger"
 
-export class AuthType{
-    @ApiProperty()
-    access_token:string
+export class PaymentInit{
+
 
     @ApiProperty()
-    refresh_token:string
+    clientSecret:string
+
+    @ApiProperty()
+    intent_id:string
 }

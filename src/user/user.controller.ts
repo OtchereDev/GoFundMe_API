@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Post, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { User } from './entity/user.entity';
 import { UserRepository } from './entity/user.repo';
 import {UserDTO} from './dto/user.dto'
 import { UserService } from './user.service';
 import { UserCreateSerializer } from './types/UserSerializer.type';
-import { ApiBody, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { JwtGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('user')
 @ApiTags('Auth')
@@ -12,11 +13,15 @@ export class UserController {
     constructor(private userRepository:UserRepository,
                 private userService:UserService){}
 
-    @Get()
-    async handleGet() : Promise<User[]>{
-        const users = await this.userRepository.find({})
+    @Post()
+    @UseGuards(JwtGuard)
+    @ApiBearerAuth()
+    async handleGetUser(@Req() req) {
+        const {email}= req.user
+        
+        const user = await this.userRepository.getUser(email)
       
-        return users
+        return user
     }
 
     @Post('/signup')
