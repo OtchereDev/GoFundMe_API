@@ -17,6 +17,7 @@ export class PaymentsController {
     async handlePayment(@Body() body:Charge):Promise<PaymentInit>{
         return await this.paymentService.createPaymentIntent(
                                         body.amount,
+                                        body.tip,
                                         body.fundraiser_id,
                                         body.name
                                         )
