@@ -32,7 +32,7 @@ export class PaymentsService {
 
     }
 
-    async createPaymentIntent(amount:number, fundraiser_id,name) : Promise<PaymentInit>{
+    async createPaymentIntent(amount:number,tip:number, fundraiser_id:string,name:string) : Promise<PaymentInit>{
         try {
             await Fundraiser.findOneOrFail(fundraiser_id)
             const paymentIntent = await this.stripe.paymentIntents.create({
@@ -48,7 +48,7 @@ export class PaymentsService {
             await PaymentIntent.create({intent_id:paymentIntent.id,
                                         amount:paymentIntent.amount,
                                         fundraiser_id,
-                                        
+                                        tip
                                 }).save()
     
             return {

@@ -14,6 +14,17 @@ export class Charge{
     })
     amount:number
 
+    @IsNumber({},{
+        message:'please provide a valid numeric amount'
+    })
+    @Min(5,{
+        message:'mininmum amount is $5'
+    })
+    @ApiProperty({
+        description:"Tip being offered to us"
+    })
+    tip:number
+
     @IsUUID()
     @ApiProperty({
         description:"The id of the fundraiser to which the donation is made to"

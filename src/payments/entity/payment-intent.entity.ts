@@ -18,4 +18,10 @@ export class PaymentIntent extends BaseEntity{
     })
     amount:number
 
+    @Column({
+        type:"float",
+       
+    })
+    tip:number
+
 }
