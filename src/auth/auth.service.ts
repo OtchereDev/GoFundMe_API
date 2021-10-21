@@ -81,25 +81,31 @@ export class AuthService {
             audience: process.env.CLIENT_ID
         });
         
-        const { name, email, picture } = ticket.getPayload(); 
+        const { name, email, picture, ...rest } = ticket.getPayload(); 
 
-        const checkUser=await this.userRepository.findOne({email})
+        let checkUser=await this.userRepository.findOne({email})
         
-
+        let payload;
+        
         if (!checkUser){
-            await this.userRepository.createUser({email,
+            const newUser = await this.userRepository.createUser({email,
                                                 fullName:name, 
                                                 password:config.socialAuthPassword})
+            payload={
+                email,
+                sub:newUser.id
+            }
             
-            
+        }
+        else{
+
+            payload={
+               
+                email,
+                sub:checkUser.id
+            }
         }
         
-
-        const payload={
-           
-            email,
-            sub:checkUser.id
-        }
    
     
         return {
