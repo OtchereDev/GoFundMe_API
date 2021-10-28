@@ -4,7 +4,7 @@ import { UserDTO } from './dto/user.dto';
 import { UserRepository } from './entity/user.repo';
 import { UserCreateSerializer } from './types/UserSerializer.type';
 import {AuthDTO} from '../auth/dto/auth.dto'
-import { User } from './entity/user.entity';
+import { Fundraiser } from 'src/fundraiser/entity/fundraiser.entity';
 
 @Injectable()
 export class UserService {
@@ -21,4 +21,14 @@ export class UserService {
 
     }
 
+    async getProfile(email:string):Promise<{fundraisers:Fundraiser[],email:string}>{
+        // const user_profile=await this.userRepository.findOne({email})
+        const user_profile=await this.userRepository.findOne({id:1})
+        console.log("cc",user_profile.fundraisers)
+
+        return {
+            fundraisers: user_profile.fundraisers || [],
+            email: user_profile.email
+        }
+    }
 }
