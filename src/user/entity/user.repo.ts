@@ -1,4 +1,4 @@
-import { BadRequestException } from "@nestjs/common";
+import { BadRequestException, UnauthorizedException } from "@nestjs/common";
 
 import { EntityRepository, Repository } from "typeorm";
 import * as bcrypt from 'bcrypt'
@@ -38,14 +38,20 @@ export class UserRepository extends Repository<User>{
 
     async getUser(email) {
 
-        const query = await this.findOne({email})
-
-        return {
-            email,
-            full_name: query.fullName,
-            id:query.id
-
+        try {
+            
+            const query = await this.findOneOrFail({email})
+    
+            return {
+                email,
+                full_name: query.fullName,
+                id:query.id
+    
+            }
+        } catch (error) {
+            throw new UnauthorizedException()
         }
+
     }
 
     async createUser(user:UserDTO) :Promise<UserCreateSerializer> {
@@ -63,7 +69,7 @@ export class UserRepository extends Repository<User>{
             }
             
         } catch (error) {
-            console.log(error)
+            // console.log(error)
             let message:string = 'Sorry, could not complete signup';
 
             // change error code to reflect db used in prod
