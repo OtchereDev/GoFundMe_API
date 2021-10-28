@@ -71,10 +71,14 @@ export class PaymentsService {
 
               const paymentIntent = event.data.object as Stripe.Charge;
 
+              const intent = await PaymentIntent.findOneOrFail({intent_id: paymentIntent.id})
+
+              const donationAmount = (paymentIntent.amount / 100) - intent.tip
+
               await this.donationRepo.saveDonation(
                   paymentIntent.id,
                   paymentIntent.metadata.name,
-                  paymentIntent.amount / 100,
+                  donationAmount,
               )
             
               break;
