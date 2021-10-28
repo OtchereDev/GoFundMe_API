@@ -652,17 +652,10 @@
     "@types/jsonwebtoken" "8.5.4"
     jsonwebtoken "8.5.1"
 
-<<<<<<< HEAD
 "@nestjs/mapped-types@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@nestjs/mapped-types/-/mapped-types-1.0.0.tgz#52a0441795f6da8144a35970d3ebc19281f31cfd"
   integrity sha512-26AW5jHadLXtvHs+M+Agd9KZ92dDlBrmD0rORlBlvn2KvsWs4JRaKl2mUsrW7YsdZeAu3Hc4ukqyYyDdyCmMWQ==
-=======
-"@nestjs/mapped-types@0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@nestjs/mapped-types/-/mapped-types-0.4.1.tgz#e7fe038f0bdda7b8f858fa79ca8516b8f9069b1a"
-  integrity sha512-JXrw2LMangSU3vnaXWXVX47GRG1FbbNh4aVBbidDjxT3zlghsoNQY6qyWtT001MCl8lJGo8I6i6+DurBRRxl/Q==
->>>>>>> bdbf8d41d935040e598af0f7f1db7cd148baaec5
 
 "@nestjs/passport@^8.0.1":
   version "8.0.1"
@@ -691,21 +684,12 @@
     jsonc-parser "3.0.0"
     pluralize "8.0.0"
 
-<<<<<<< HEAD
 "@nestjs/swagger@^5.1.0":
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/@nestjs/swagger/-/swagger-5.1.0.tgz#dddce4fca002a008d3b996d845a57c6c7be993bd"
   integrity sha512-+/Edyzkh3n9Kkw72zzRDHF1ZWK1PlvkkM9lK9fjYaiMjEZ3oaCiSjdwd88vAVX6UIP0nvQkT5VNpSLYU+GK5yg==
   dependencies:
     "@nestjs/mapped-types" "1.0.0"
-=======
-"@nestjs/swagger@4.8.2":
-  version "4.8.2"
-  resolved "https://registry.yarnpkg.com/@nestjs/swagger/-/swagger-4.8.2.tgz#0a0b3ca1b25146e797ca77addd9fa97f82406c1c"
-  integrity sha512-RSUwcVxrzXF7/b/IZ5lXnYHJ6jIGS9wWRTJKIt1kIaCNWT+0wRfTlAyhQkzs2g35/PTXJEcdIwwY7mBO/bwHzw==
-  dependencies:
-    "@nestjs/mapped-types" "0.4.1"
->>>>>>> bdbf8d41d935040e598af0f7f1db7cd148baaec5
     lodash "4.17.21"
     path-to-regexp "3.2.0"
 
@@ -6341,15 +6325,9 @@ supports-hyperlinks@^2.0.0:
     supports-color "^7.0.0"
 
 swagger-ui-dist@^3.18.1:
-<<<<<<< HEAD
-  version "3.52.3"
-  resolved "https://registry.yarnpkg.com/swagger-ui-dist/-/swagger-ui-dist-3.52.3.tgz#a09b5cdccac69e3f5f1cbd258654a110119a7f0e"
-  integrity sha512-7QSY4milmYx5O8dbzU5tTftiaoZt+4JGxahTTBiLAnbTvhTyzum9rsjDIJjC+xeT8Tt1KfB38UuQQjmrh2THDQ==
-=======
   version "3.52.0"
   resolved "https://registry.yarnpkg.com/swagger-ui-dist/-/swagger-ui-dist-3.52.0.tgz#cb16ec6dcdf134ff47cbfe57cba7be7748429142"
   integrity sha512-SGfhW8FCih00QG59PphdeAUtTNw7HS5k3iPqDZowerPw9mcbhKchUb12kbROk99c1X6RTWW1gB1kqgfnYGuCSg==
->>>>>>> bdbf8d41d935040e598af0f7f1db7cd148baaec5
 
 swagger-ui-express@^4.1.6:
   version "4.1.6"
