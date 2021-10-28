@@ -17,8 +17,8 @@ export class Charge{
     @IsNumber({},{
         message:'please provide a valid numeric amount'
     })
-    @Min(5,{
-        message:'mininmum amount is $5'
+    @Min(0,{
+        message:'mininmum tip is $0'
     })
     @ApiProperty({
         description:"Tip being offered to us"
