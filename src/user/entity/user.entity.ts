@@ -1,5 +1,5 @@
 import { Fundraiser } from 'src/fundraiser/entity/fundraiser.entity';
-import { Entity, Column, PrimaryGeneratedColumn,BaseEntity, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn,BaseEntity, CreateDateColumn, UpdateDateColumn, OneToMany,BeforeInsert } from 'typeorm';
 
 @Entity()
 export class User extends BaseEntity {
@@ -30,4 +30,9 @@ export class User extends BaseEntity {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @BeforeInsert()
+  emailToUpperCase() {
+      this.email = this.email.toLowerCase()
+  }
 }
