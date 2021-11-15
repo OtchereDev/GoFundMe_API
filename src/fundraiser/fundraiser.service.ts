@@ -39,7 +39,7 @@ export class FundraiserService {
             const query = await this.fundraiserRepo.findOneOrFail(id)
             const response:FundDetailSerializer={
                 id: query.id,
-                category: query.category.map(cat=>cat.name),
+                category: query.category,
                 title: query.title,
                 description: query.description,
                 beneficiary: query.beneficiary,
@@ -96,7 +96,7 @@ export class FundraiserService {
         const query=await this.fundraiserRepo.createFundraiser(body,user)
         const obj:FundDetailSerializer={
             id: query.id,
-            category: query.category.map(cat=>cat.name),
+            category: query.category,
             title: query.title,
             description: query.description,
             beneficiary: query.beneficiary,
