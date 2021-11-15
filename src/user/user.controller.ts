@@ -26,12 +26,12 @@ export class UserController {
     }
 
     @Get("/profile")
-    // @UseGuards(JwtGuard)
-    // @ApiBearerAuth()
+    @UseGuards(JwtGuard)
+    @ApiBearerAuth()
     @ApiCreatedResponse({type:ProfileType})
     async handleProfile(@Req() req):Promise<{fundraisers:Fundraiser[],email:string}>{
-        // const {email}=req?.user
-        const email="olover"
+        const {email}=req?.user
+        
 
         return this.userService.getProfile(email)
     }
