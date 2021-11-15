@@ -12,12 +12,12 @@ export class FundraiserRepository extends Repository<Fundraiser>{
 
     async createFundraiser(body:FundraiserDTO,organiser:User):Promise<Fundraiser>{
 
-        let category=await Category.findOne({name:body.category})
+        let category=await Category.findOne({name:body.category.toLowerCase()})
 
         if (!category){
-            category=await Category.create({name:body.category}).save()
+            category=await Category.create({name:body.category.toLowerCase()}).save()
         }
-        const fundraiserData={...body,organiser,category:[category],image_url:"/google/"}
+        const fundraiserData={...body,organiser,category: category,image_url:"/google/"}
 
         return this.create({...fundraiserData}).save()
 
@@ -51,9 +51,14 @@ export class FundraiserRepository extends Repository<Fundraiser>{
         return query
     }
 
-    async filterCategory(categ:string) : Promise<Fundraiser[]>{
+    async filterCategory(categoryId:string) : Promise<Fundraiser[]>{
 
-        const query= await this.find({where:{category:{name:ILike(categ)}}})
+        // const query= await this.find({where:{category:{name:ILike(categ)}}})
+        const query =  await this.createQueryBuilder("fundraiser")
+                        .leftJoinAndSelect("fundraiser.category","category")
+                        .leftJoinAndSelect("fundraiser.organiser","organiser")
+                        .where("category.id = :categoryId", {categoryId})
+                        .getMany()
         
         return query
     }
@@ -83,7 +88,7 @@ export class FundraiserRepository extends Repository<Fundraiser>{
                         // .take(8)
                         .getMany()
         
-        return await query
+        return query
     }
 
 }

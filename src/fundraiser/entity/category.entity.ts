@@ -1,5 +1,6 @@
-import { BaseEntity,Entity,Column, PrimaryGeneratedColumn, ManyToMany } from 'typeorm'
+import { BaseEntity,Entity,Column, PrimaryGeneratedColumn, ManyToMany, OneToMany } from 'typeorm'
 import { Fundraiser } from './fundraiser.entity'
+import { Field } from '@nestjs/graphql'
 
 
 @Entity()
@@ -13,7 +14,7 @@ export class Category extends BaseEntity{
     })
     name:string
 
-    @ManyToMany(()=>Fundraiser,fundraiser=>fundraiser.category,{
+    @OneToMany(()=>Fundraiser,fundraiser=>fundraiser.category,{
         nullable:true
     })
     fundraisers:Fundraiser[]

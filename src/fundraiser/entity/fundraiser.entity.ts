@@ -10,12 +10,8 @@ export class Fundraiser extends BaseEntity{
     id:string
 
 
-    @ManyToMany(()=>Category, category=>category.fundraisers,{
-        eager:true,
-
-    })
-    @JoinTable()
-    category:Category[]
+    @ManyToOne(()=>Category, category=>category.fundraisers)
+    category:Category
 
     @Column({
         type:'varchar',
