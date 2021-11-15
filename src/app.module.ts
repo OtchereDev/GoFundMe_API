@@ -6,6 +6,8 @@ import { AuthModule } from './auth/auth.module';
 import { FundraiserModule } from './fundraiser/fundraiser.module';
 import { PaymentsModule } from './payments/payments.module';
 import { StoryModule } from './story/story.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { CategoryModule } from './category/category.module';
 
 
 @Module({
@@ -19,6 +21,12 @@ import { StoryModule } from './story/story.module';
     FundraiserModule,
     PaymentsModule,
     StoryModule,
+    GraphQLModule.forRoot({
+      // debug:true,
+      // playground:true,
+      autoSchemaFile: true,
+    }),
+    CategoryModule,
   ],
 
 })

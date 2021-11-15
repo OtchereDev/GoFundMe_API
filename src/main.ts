@@ -4,6 +4,8 @@ import {NestExpressApplication} from '@nestjs/platform-express'
 import { join } from 'path';
 import * as express from 'express'
 import {DocumentBuilder, SwaggerCustomOptions, SwaggerModule} from '@nestjs/swagger'
+import { ValidationPipe } from '@nestjs/common';
+import {graphqlUploadExpress} from "graphql-upload"
 
 
 async function bootstrap() {
@@ -35,6 +37,10 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app,config)
 
   SwaggerModule.setup("docs",app,document,option)
+
+  app.useGlobalPipes(new ValidationPipe())
+
+  app.use(graphqlUploadExpress())
 
   await app.listen(3000);
 }
