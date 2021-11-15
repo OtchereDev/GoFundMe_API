@@ -92,7 +92,7 @@ export class FundraiserController {
     @Get('/cat/:category')
     @ApiParam({
         type:'string',
-        name:'category',
+        name:'categoryId',
         description:'Category for which search should be performed'
     })
     @ApiOkResponse({type:[FundSearchSerializer],description:'Fundraiser found in the given category'})
