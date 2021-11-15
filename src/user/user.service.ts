@@ -24,7 +24,6 @@ export class UserService {
     async getProfile(email:string):Promise<{fundraisers:Fundraiser[],email:string}>{
         // const user_profile=await this.userRepository.findOne({email})
         const user_profile=await this.userRepository.findOne({id:1})
-        console.log("cc",user_profile.fundraisers)
 
         return {
             fundraisers: user_profile.fundraisers || [],
