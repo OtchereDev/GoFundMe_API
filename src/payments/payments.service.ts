@@ -92,9 +92,9 @@ export class PaymentsService {
           } 
     }
 
-    async addPayerComment(intent_id:string,message:string):Promise<void>{
+    async addPayerComment(intent_id:string,message:string):Promise<Boolean>{
         await this.donationRepo.addPayerComment(intent_id,message)
-        return 
+        return true
     }
 
 }
