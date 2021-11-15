@@ -1,5 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Donation } from "src/payments/entity/donation.entity";
+import { Fundraiser } from "../entity/fundraiser.entity";
+
+type categoryType = {
+    id:string,
+    name: string
+}
 
 export class FundDetailSerializer {
 
@@ -7,7 +13,7 @@ export class FundDetailSerializer {
     id:string
 
     @ApiProperty()
-    category:string[]
+    category:categoryType
 
     @ApiProperty()
     title:string
