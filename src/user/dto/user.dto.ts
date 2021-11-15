@@ -1,6 +1,9 @@
 import { IsEmail, IsNotEmpty,MinLength,Matches } from "class-validator"
 import { ApiProperty } from "@nestjs/swagger"
+import { Field, InputType } from "@nestjs/graphql"
 
+
+@InputType()
 export class UserDTO{
 
     @IsNotEmpty({
@@ -9,6 +12,7 @@ export class UserDTO{
     @ApiProperty({
         description:'full user name'
     })
+    @Field()
     fullName:string
 
     @IsEmail({},{
@@ -17,6 +21,7 @@ export class UserDTO{
     @ApiProperty({
         description:"User email"
     })
+    @Field()
     email:string
 
     @MinLength(8,{
@@ -28,6 +33,7 @@ export class UserDTO{
     @ApiProperty({
         description:'User Strong Password',
     })
+    @Field()
     password:string
 
 }
