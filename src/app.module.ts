@@ -23,7 +23,7 @@ import { CategoryModule } from './category/category.module';
     StoryModule,
     GraphQLModule.forRoot({
       // debug:true,
-      // playground:true,
+      playground:true,
       autoSchemaFile: true,
     }),
     CategoryModule,
