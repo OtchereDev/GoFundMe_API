@@ -74,8 +74,9 @@ export class AuthService {
     }
 
     async customGoogleLogin(body:any):Promise<AuthType>{
+        console.log(body,process.env.CLIENT_ID)
         const { token }  = body
-
+        
         const ticket = await client.verifyIdToken({
             idToken: token,
             audience: process.env.CLIENT_ID
