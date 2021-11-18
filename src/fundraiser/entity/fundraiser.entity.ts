@@ -40,8 +40,8 @@ export class Fundraiser extends BaseEntity{
     donations:Donation[]
 
     @Column({
-        type:'double',
-        precision:2
+        type: "double precision",
+        // precision:2
     })
     goal_amount:number
 

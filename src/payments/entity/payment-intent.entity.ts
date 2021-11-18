@@ -14,14 +14,14 @@ export class PaymentIntent extends BaseEntity{
     fundraiser_id:string
 
     @Column({
-        type:'double'
+        type: "double precision",
+        // precision:2
     })
     amount:number
 
     @Column({
         type:"float",
-        default:0
-       
+        default:0    
     })
     tip:number
 

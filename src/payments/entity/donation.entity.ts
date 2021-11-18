@@ -20,7 +20,8 @@ export class Donation extends BaseEntity{
     fundraiser:Fundraiser
 
     @Column({
-        type:'double'
+        type: "double precision",
+        // precision:2
     })
     amount:number
 
