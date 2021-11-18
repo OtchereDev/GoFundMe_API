@@ -25,6 +25,7 @@ import { CategoryModule } from './category/category.module';
       // debug:true,
       playground:true,
       autoSchemaFile: true,
+      introspection:true
     }),
     CategoryModule,
   ],
