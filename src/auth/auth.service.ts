@@ -10,7 +10,7 @@ import { TokenType } from './types/token.type';
 import { OAuth2Client } from 'google-auth-library';
 import { UserRepository } from 'src/user/entity/user.repo';
 import config from 'src/config/config';
-const client = new OAuth2Client(process.env.CLIENT_ID)
+const client = new OAuth2Client(process.env.ClientID)
 
 @Injectable()
 export class AuthService {
@@ -74,12 +74,12 @@ export class AuthService {
     }
 
     async customGoogleLogin(body:any):Promise<AuthType>{
-        console.log(body,process.env.CLIENT_ID)
+        
         const { token }  = body
         
         const ticket = await client.verifyIdToken({
             idToken: token,
-            audience: process.env.CLIENT_ID
+            audience: process.env.ClientID
         });
         
         const { name, email, picture, ...rest } = ticket.getPayload(); 
