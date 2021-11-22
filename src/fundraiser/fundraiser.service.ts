@@ -36,7 +36,7 @@ export class FundraiserService {
     async getFundraiserDetail(id:string):Promise<FundDetailSerializer>{
 
         try {
-            const query = await this.fundraiserRepo.findOneOrFail(id)
+            const query = await this.fundraiserRepo.findOneOrFail(id,{relations:["category"]})
             const response:FundDetailSerializer={
                 id: query.id,
                 category: query.category,
